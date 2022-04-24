@@ -1,3 +1,8 @@
 function isEmpty(obj) {
-  // ваш код...
+  for (let key in obj) {
+    if (typeof(key) == "string") {
+      return false;
+    }
+  }
+  return true;
 }
