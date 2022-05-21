@@ -58,28 +58,28 @@ export default class Carousel {
     this.arrowLeft.style.display = "none";
     this.arrowRight.style.display = "";
 
-    let count = 0;
+    this.count = 0;
 
     this.arrowLeft.addEventListener("click", (event) => {
-      count--;
-      this.carouselMove(count);
+      this.count--;
+      this.carouselMove();
     })
 
     this.arrowRight.addEventListener("click", (event) => {
-      count++;
-      this.carouselMove(count);
+      this.count++;
+      this.carouselMove();
     })
     
   }
 
-  carouselMove(count) {
+  carouselMove() {
     const carousel = this.elem.querySelector(".carousel__inner");
 
-    switch(count) {
+    switch(this.count) {
       case 0: 
         this.arrowLeft.style.display = "none";
         break; 
-      case 3: 
+      case this.slides.length - 1: 
         this.arrowRight.style.display = "none";
         break;
       default: 
@@ -88,6 +88,6 @@ export default class Carousel {
     }
 
     const width = carousel.offsetWidth;
-    carousel.style.transform = `translateX(-${width*count}px)`;
+    carousel.style.transform = `translateX(-${width*this.count}px)`;
   }
 }
