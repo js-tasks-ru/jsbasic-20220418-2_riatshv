@@ -155,7 +155,7 @@ export default class StepSlider {
       this.elem.classList.add("slider_dragging");
 
       // Добаввляем событие поднятия мыши/пальца через метод объекта, чтобы потом его без проблем удалить
-      document.onpointerup = (event) {
+      document.onpointerup = (event) => {
         this.elem.classList.remove("slider_dragging");
         console.log(this)
         this.#sliderUpdate(event);
