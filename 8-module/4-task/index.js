@@ -195,9 +195,10 @@ export default class Cart {
   }
 
   onProductUpdate(cartItem) {
-    if (document.body.className == "is-modal-open") {
+    if (document.body.className == "is-modal-open" && this.modalBody) {
       if (this.isEmpty()) {
         this.modal.close();
+        return
       } else {
         if (cartItem.count == 0) {
           this.modal.close();
