@@ -31,27 +31,20 @@ export default class Main {
 
     this.cart = new Cart(this.cartIcon);
 
-    try {
-      let response = await fetch("products.json");
-      this.products = await response.json();
-      this.productsGrid = new ProductsGrid(this.products);
-      document.querySelector("[data-products-grid-holder]").innerHTML = "";
-      document.querySelector("[data-products-grid-holder]").append(this.productsGrid.elem);
+    let response = await fetch("products.json");
+    this.products = await response.json();
+    this.productsGrid = new ProductsGrid(this.products);
+    document.querySelector("[data-products-grid-holder]").innerHTML = "";
+    document.querySelector("[data-products-grid-holder]").append(this.productsGrid.elem);
 
-      this.productsGrid.updateFilter({
-        noNuts: document.getElementById('nuts-checkbox').checked,
-        vegeterianOnly: document.getElementById('vegeterian-checkbox').checked,
-        maxSpiciness: this.stepSlider.value,
-        category: this.ribbonMenu.value
-      });
+    this.productsGrid.updateFilter({
+      noNuts: document.getElementById('nuts-checkbox').checked,
+      vegeterianOnly: document.getElementById('vegeterian-checkbox').checked,
+      maxSpiciness: this.stepSlider.value,
+      category: this.ribbonMenu.value
+    });
 
-      this.#addCustomEventListeners();
-
-    } catch(error) {
-      console.log(error);
-    }
-
-    
+    this.#addCustomEventListeners();
   }
 
   #addCustomEventListeners() {
