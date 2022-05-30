@@ -3,6 +3,7 @@ import createElement from '../../assets/lib/create-element.js';
 export default class CartIcon {
   constructor() {
     this.render();
+    this.counter = 0;
 
     this.addEventListeners();
   }
@@ -39,6 +40,40 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    // ваш код ...
+    if (!this.elem.getBoundingClientRect().width) {
+      return;
+    }
+
+    if (this.counter == 0) {
+      this.initialY = this.elem.getBoundingClientRect().y + window.pageYOffset;
+      this.counter = null;
+    }
+
+    const leftSide = document.querySelector(".heading").getBoundingClientRect().right + 20;
+    const rightSide = document.documentElement.clientWidth - 10 - this.elem.getBoundingClientRect().width;
+
+
+    if (window.pageYOffset > this.initialY) {
+      const position = Math.min(leftSide, rightSide);
+      Object.assign(this.elem.style, {
+        zIndex: "100",
+        left: `${position}px`,
+        position: "fixed",
+      });
+    } else {
+      Object.assign(this.elem.style, {
+        zIndex: "",
+        left: ``,
+        position: "",
+      });
+    }
+
+    if (document.documentElement.clientWidth <= 768) {
+      Object.assign(this.elem.style, {
+        zIndex: "",
+        left: ``,
+        position: "",
+      });
+    }
   }
 }

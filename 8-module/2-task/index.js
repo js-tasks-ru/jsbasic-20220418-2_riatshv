@@ -2,48 +2,66 @@ import createElement from '../../assets/lib/create-element.js';
 import ProductCard from '../../6-module/2-task/index.js';
 
 export default class ProductGrid {
+
   constructor(products) {
     this.products = products;
     this.filters = {};
-    this.render();
+    this.#gridUpdate();
   }
 
-  render() {
-    this.elem = createElement(`<div class="products-grid">
-      <div class="products-grid__inner"></div>
+  #cardsUpdate(products) {
+    this.gridInner = createElement(`     
+    <div class="products-grid__inner">
+
     </div>`);
 
-    this.renderContent();
+    for (let product of products) {
+      const currentCard = new ProductCard(product);
+      this.gridInner.append(currentCard.elem);
+    }
+    this.gridContainer.append(this.gridInner)
+
+    this.elem = this.gridContainer;
   }
 
-  renderContent() {
-    this.sub('inner').innerHTML = '';
+  #gridUpdate() {
+    this.gridContainer = createElement(`
+    <div class="products-grid">
 
-    for (let product of this.products) {
-      if (this.filters.noNuts && product.nuts) {continue;}
+    </div>
+    `);
 
-      if (this.filters.vegeterianOnly && !product.vegeterian) {continue;}
+    this.#cardsUpdate(this.products)
+  }
 
-      if (this.filters.maxSpiciness !== undefined && product.spiciness > this.filters.maxSpiciness) {
-        continue;
+  #filterCard(filters) { 
+    const {noNuts, vegeterianOnly, maxSpiciness, category} = filters;
+    this.availableProducts = []
+
+    this.availableProducts = this.products.filter( (currentProduct) => {
+      if (noNuts && currentProduct.nuts) {
+        return false;
       }
-
-      if (this.filters.category && product.category != this.filters.category) {
-        continue;
+      if (vegeterianOnly && !currentProduct.vegeterian) {
+        return false;
       }
-
-      let card = new ProductCard(product);
-      this.sub("inner").append(card.elem);
-    }
+      if (maxSpiciness < currentProduct.spiciness && maxSpiciness) {
+        return false;
+      }
+      if (category != currentProduct.category && category) {
+        return false;
+      }
+      return true;
+    })
   }
 
   updateFilter(filters) {
-    Object.assign(this.filters, filters);
-    this.renderContent();
-  }
+    this.gridInner.remove();
 
-  sub(ref) {
-    return this.elem.querySelector(`.products-grid__${ref}`);
-  }
+    Object.assign(this.filters, filters)
 
+    this.#filterCard(this.filters);
+
+    this.#cardsUpdate(this.availableProducts);
+  }
 }
